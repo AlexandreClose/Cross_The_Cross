@@ -1,0 +1,503 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=FrontPage.Editor.Document>
+<meta name=Generator content="Microsoft FrontPage 4.0">
+<meta name=Originator content="Microsoft Word 9">
+
+<title>ClassExec</title>
+
+<style>
+
+</style>
+
+</head>
+
+<body bgcolor=#FFFFFF background="../../Web/Art/backGnd.jpg"
+lang=EN-GB link=#0000FF vlink=#800080 style='tab-interval:36.0pt'>
+
+
+<div class=Section1>
+
+<h1><b>ClassExec</b></h1>
+
+<u><a
+href="#_Toc465431022">Page Updates</a></u>
+
+<br><b><u><a href="#_Toc465431023">Introduction</a></u></b>
+
+<br><b><u><a href="#_Toc465431024">Release Notes</a></u></b>
+
+<br>&nbsp;&nbsp;<u><a href="#_Toc465431025">v1.03</a></u>
+
+<br>&nbsp;&nbsp;<u><a href="#_Toc465431026">v1.02</a></u>
+
+<br>&nbsp;&nbsp;<u><a href="#_Toc465431027">v1.01</a></u>
+
+<br>&nbsp;&nbsp;<u><a href="#_Toc465431028">v1.00</a></u>
+
+<br><b><u><a href="#_Toc465431029">Examples</a></u></b>
+
+<br>&nbsp;&nbsp;<u><a href="#_Toc465431030">Introduction</a></u>
+
+<br>&nbsp;&nbsp;<u><a href="#_Toc465431031">Selecting browser</a></u>
+
+<br>&nbsp;&nbsp;<u><a href="#_Toc465431032">Printing</a></u>
+
+<br>&nbsp;&nbsp;<u><a href="#_Toc465431033">Calling Word macro on startup<br>
+</a></u>
+
+&nbsp;&nbsp;<a href="#Calling Excel macro on startup">Calling Excel macro on startup</a>
+
+<br>&nbsp;&nbsp;<u><a href="#_Toc465431034">Word batch conversion<br>
+</a></u>
+
+&nbsp;&nbsp;<a href="#Word batch conversion, keeping date of original file">Word batch conversion, keeping date of original file</a>
+
+<br><b><u><a href="#_Toc465431035">Known Problems</a></u></b>
+
+<br>&nbsp;&nbsp;<u><a href="#_Toc465431036">Word97 error: &quot;Ambiguous name detected:
+TmpDDE&quot;</a></u>
+
+<br>&nbsp;&nbsp;<u><a href="#_Toc465431037">Regressive Word 97 DDE functionality</a></u>
+
+<br><b><u><a href="#_Toc465431038">Download</a></u></b>
+
+<br><b><u><a href="#_Toc465431039">Alternatives</a></u></b>
+
+<br>&nbsp;&nbsp;<u><a href="#_Toc465431040">'ShellExecute()' API function</a></u>
+
+<br>&nbsp;&nbsp;<u><a href="#_Toc465431041">'Start' command line function<br>
+</a></u>
+
+&nbsp;&nbsp;<u><a href="#Word Batch Conversion Wizard">Word Batch Conversion Wizard</a></u>
+
+<h1><a name="_Toc447380492"></a><a name="_Toc449535028"></a><a
+name="_Toc465431022"><b>Page Updates</b></a></h1>
+
+<ul>
+ <li>Apr 16, 2000; Added examples and alternative 'Word Batch Conversion
+  Wizard'.</li>
+ <li>Mar 31, 2000; Repacked .zip files.&nbsp; Moved site location.</li>
+ <li>Apr
+     23, 1999; Added example 'Batch conversion'.</li>
+ <li>Apr
+     18, 1999; Added section 'Alternatives' and 'Regressive Word 97 DDE
+     functionality'.</li>
+</ul>
+
+<h1><a name="_Toc449535029"></a><a
+name="_Toc465431023"><b>Introduction</b></a></h1>
+
+<p>As far as I'm
+concerned, the diatribes about DDE being too old a technology to be of any use,
+are a great misunderstanding.  Microsoft
+makes <b>excessive</b>
+use of DDE – up to and including Windows 98 – to let the shell communicate with
+various applications (e.g. MS Office). 
+Just search the registry for '<b>ddeexec</b>' and you'll see what I mean.
+
+<p>Most Windows
+applications lack the wealth of <b>startup arguments</b> which normally would
+allow you to pass information to the program during startup.  'ClassExec' brings back this functionality to
+the <b>command
+prompt</b>.
+
+<p>Unfortunately,
+<b>Microsoft</b>
+doesn't seem very proud of it.  For
+instance, it is very hard hard to get some useful information about <b>DDE</b>,
+let alone how to use it.  ClassExec
+allows you to use DDE within Windows 95, 98 as well as NT.  Here are some powerful examples:
+
+<pre>&nbsp;&nbsp; classExec C:\* D:\* --class .htm</pre>
+
+<p>The above
+command will open all files in the C:\ directory as well as in the D:\
+directory in the application that is registered to open .htm files (most
+probably your browser).  Suppose you want
+to open all files in your html editor instead? 
+If 'edit' is in your right mouse button menu, just add the 'action'
+argument:
+
+<pre>&nbsp;&nbsp; classExec C:\* D:\* --class .htm --action edit</pre>
+
+<p>And what about
+creating a new Word document based on your <b>template</b>, calling your <b>macro</b> on startup, <b>without
+bothering normal.dot</b>:
+
+<pre>&nbsp;&nbsp; classExec my.dot --action new --command &quot;[NewMacros.ShowMessages \&quot;Msg1\&quot;, \&quot;Msg2\&quot;]&quot;</pre>
+
+<h1><a
+name="_Toc465431024"><b>Release Notes</b></a></h1>
+
+<h2><a
+name="_Toc465431025"><b><i>v1.03</i></b></a></h2>
+
+<ul>
+ <li>Fixed
+     Windows NT error message &quot;The instruction at '0x77f64b53' referenced
+     memory at '0x0000031d'.  The memory
+     could not be 'read'&quot;, caused by 'LocalFree()' which tried to free an
+     already freed piece of memory.</li>
+</ul>
+
+<h2><a
+name="_Toc465431026"><b><i>v1.02</i></b></a></h2>
+
+<ul>
+ <li>Fixed
+     error message &quot;invalid page fault in module CLASSEXEC.EXE at
+     0137:00401595&quot; when using a full classname (e.g. 'txtfile') instead
+     of an extension (e.g. '.txt').</li>
+</ul>
+
+<h2><a
+name="_Toc465431027"><b><i>v1.01</i></b></a></h2>
+
+<ul>
+ <li>Fixed
+     error message &quot;access violation on address 0xC0000005&quot; on
+     Windows NT, caused by dynamic determination of application name.  Application name now is set fixed to
+     &quot;classExec&quot;.</li>
+ <li>Added
+     environment string expansion to commands. 
+     E.g. the command &quot;%SystemRoot%\system32\notepad.exe&quot; now
+     will get expanded to &quot;C:\WinNt\system32\notepad.exe&quot;.</li>
+ <li>Enhanced
+     error message of non-startable application with the application command
+     line string.</li>
+</ul>
+
+<h2><a
+name="_Toc465431028"><b><i>v1.00</i></b></a></h2>
+
+<ul>
+ <li>Initial
+     version.</li>
+</ul>
+
+<h1><a
+name="_Toc465431029"><b>Examples</b></a></h1>
+
+<h2><a name="_Toc465431030"><b><i>Introduction</i></b></a></h2>
+
+<p>The commands:
+
+<pre>&nbsp;&nbsp; classExec
+&nbsp;&nbsp; classExec --help</pre>
+
+<p>will display a
+help message and exit.  The commands:
+
+<pre>&nbsp;&nbsp; classExec &lt;filename&gt;
+&nbsp;&nbsp; classExec &lt;filename&gt; --action open</pre>
+
+<p>both will open
+&lt;filename&gt;, since 'open' is the default action of <CODE>classExec</CODE> if no action is specified. 
+Note this is the same as the built-in Windows command:
+
+<pre>&nbsp;&nbsp; start &lt;filename&gt;</pre>
+
+<p>The command:
+
+<pre>&nbsp;&nbsp; classExec *</pre>
+
+<p>will issue the
+'open' action on all files in the current directory.  The command:
+
+<pre>&nbsp;&nbsp; classExec * --class .doc</pre>
+
+<p>will open all
+files in Word.  You want to open all
+files in Excel instead?  Here's the
+command to do so:
+
+<pre>&nbsp;&nbsp; classExec * --class .xls</pre>
+
+<p>The command:
+
+<pre>&nbsp;&nbsp; classExec C:\* D:\* --class .doc</pre>
+
+<p>will open all
+files from the C:\ directory as well as all files from the D:\ directory, in
+Word.
+
+<h2><a name="_Toc449535037"></a><a name="_Toc465431031"><b><i>Selecting browser</i></b></a></h2>
+
+<p>If you want to
+view a HTML file in your default browser from the command line, you could issue
+one of these commands:
+
+<pre>&nbsp;&nbsp; classExec example.htm
+&nbsp;&nbsp; start example.htm</pre>
+
+<p>But what to do
+if you want to view the HTML file in either Netscape Navigator or Microsoft
+Internet Explorer, without wanting to bother if it's the default browser or
+not?  Here's what to do if you want to
+view the HTML file using Netscape Navigator:
+
+<pre>&nbsp;&nbsp; classExec example.htm --class NetscapeMarkup</pre>
+
+<p>If you want to
+view the HTML file using Microsoft Internet Explorer, use:
+
+<pre>&nbsp;&nbsp; classExec example.htm --class htmlFile</pre>
+
+<h2><a name="_Toc465431032"><b><i>Printing</i></b></a></h2>
+
+<p>The command:
+
+<pre>&nbsp;&nbsp; classExec &lt;filename&gt;.doc --action print</pre>
+
+<p>will open Word
+and print &lt;filename&gt;.doc.  If Word
+wasn't open, Word will be closed automatically after the print job is
+done.  The command:
+
+<pre>&nbsp;&nbsp; classExec &lt;filename&gt;.txt --class .doc --action print</pre>
+
+<p>will open Word
+and print &lt;filename&gt;.txt.  If Word
+wasn't open, Word will be closed automatically after the print job is
+done.  The command:
+
+<pre>&nbsp;&nbsp; classExec &lt;filename&gt;.doc --action print --noifexec</pre>
+
+<p>will open Word
+and print &lt;filename&gt;.doc.  If Word
+wasn't open, Word will not be closed after the print job is done.  The command:
+
+<pre>&nbsp;&nbsp; classExec &lt;filename&gt;.doc --action print --ifexec</pre>
+
+<p>will open Word
+and print &lt;filename&gt;.doc.  After
+the print job, Word will be closed.
+
+<h2><a name="_Toc465431033"><b><i>Calling Word macro on startup</i></b></a></h2>
+
+<p>Suppose you're
+having a template <CODE>my.dot</CODE>
+with a macro <code>NewMacros.LoadFile</code>:
+
+<pre>&nbsp;&nbsp; Sub LoadFile(as_File As String)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MsgBox as_File + Chr$(13)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Selection.InsertFile as_dpf
+&nbsp;&nbsp; End Sub</pre>
+
+<p>Here's how you
+can start <CODE>C:\test.txt</CODE> in Word, base it on <CODE>my.dot</CODE>, and calling
+<CODE>LoadFile</CODE> on startup:
+
+<pre>&nbsp;&nbsp; classExec my.dot --action new --command &quot;[NewMacros.LoadFile \&quot;C:\test.txt\&quot;]&quot;</pre>
+
+<p>Or if you're
+having a macro which asks for two arguments:
+
+<pre>&nbsp;&nbsp; Sub ShowMessages(as_Msg1 As String, as_Msg2 As String)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MsgBox as_Msg1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MsgBox as_Msg2
+&nbsp;&nbsp; End Sub</pre>
+
+<p>Here's how you
+would call it:
+
+<pre>&nbsp;&nbsp; classExec my.dot --action new --command &quot;[NewMacros.ShowMessages \&quot;Msg1\&quot;, \&quot;Msg2\&quot;]&quot;</pre>
+
+<p>A macro with
+no arguments gets called like this:
+
+<pre>&nbsp;&nbsp; classExec my.dot --action new --command &quot;[NewMacros.ShowMessages()]&quot;</pre>
+
+<h2><i><a name="Calling Excel macro on startup">Calling Excel macro on startup</a></i></h2>
+
+<p>Suppose you're having a file <CODE>book1.xls</CODE> with a macro&nbsp;<CODE>Sheet1.HelloWorld</CODE>:</p>
+
+<pre>   Sub HelloWorld()
+      MsgBox &quot;Hello world!&quot;
+   End Sub</pre>
+
+<p>Here's how you would start the file, calling <CODE>Sheet1.HelloWorld</CODE>
+on startup:</p>
+
+<pre>   classExec book1.xls --command &quot;[Run(\&quot;Sheet1.HelloWorld\&quot;)]&quot;</pre>
+
+<p>It looks like it isn't possible to pass arguments to an Excel macro during
+startup.&nbsp; Anyone?</p>
+
+<h2><a name="_Toc449535040"></a><a name="_Toc465431034"><b><i>Word batch conversion</i></b></a></h2>
+
+<p>After you
+created this macro in module 'NewMacros' of 'normal.dot':
+
+<pre>&nbsp;&nbsp; Sub Convert()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ActiveDocument.SaveAs ActiveDocument.FullName + &quot;.rtf&quot;, _
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FileFormat:=wdFormatRTF
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ActiveDocument.Close
+&nbsp;&nbsp; End Sub</pre>
+
+<p>here's how you
+could invoke 'classExec' to convert all files in a folder to RTF:
+
+<pre>&nbsp;&nbsp; classExec * --class .doc --command [NewMacros.Convert()]</pre>
+
+<h2><i><a name="Word batch conversion, keeping date of original file">Word batch conversion, keeping date of original file</a></i></h2>
+
+<p>Suppose you want to convert all .doc files to .rtf.&nbsp; Extra condition is
+you want to give the .rtf file the date of the original .doc file.&nbsp; If you
+put the GNU utility <CODE>touch.exe</CODE> in the C:\Windows directory and you put the next
+macro <i>Convert</i> in the <i> NewMacros</i> section of normal.dot:&nbsp;</p>
+
+<pre>&nbsp;&nbsp; Sub Convert()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dim sFileIn, sFileOut As String
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sFileIn = ActiveDocument.FullName
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sFileOut = ActiveDocument.Path &amp; Application.PathSeparator &amp; _
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ActiveDocument.Name &amp; &quot;.rtf&quot;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ActiveDocument.SaveAs sFileOut, _
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FileFormat:=wdFormatRTF
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ActiveDocument.Close
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Shell &quot;C:\Windows\touch.exe &quot; &amp; sFileOut &amp; &quot; -r &quot; &amp; sFileIn
+&nbsp;&nbsp; End Sub</pre>
+
+<p>here's how you could invoke ClassExec to convert .doc files to RTF, keeping
+the date of the original file:
+</p>
+
+<pre>&nbsp;&nbsp;&nbsp; classExec *.doc --command [NewMacros.Convert()]</pre>
+
+<h1><a name="_Toc447380495"></a><a name="_Toc449535041"></a><a
+name="_Toc465431035"><b>Known Problems</b></a></h1>
+
+<h2><a name="_Toc447380496"></a><a name="_Toc447380494"></a><a
+name="_Toc449535042"></a><a name="_Toc465431036"><b><i>Word97 error: &quot;Ambiguous name detected: TmpDDE&quot;</i></b></a></h2>
+
+<p>When you execute a DDE command via Microsoft
+Word 97, Word will dynamically create a temporary module called 'WordTmpDDEMod'
+in normal.dot with a temporary subroutine called 'TmpDDE' in it.  This temporary subroutine contains the DDE
+commands.  After the subroutine exits,
+the temporary module will automatically be deleted.
+
+<p>However, you may found yourself in a
+situation where Word hasn't cleaned up the temporary DDE module.  Here's how you can remove the temporary DDE
+module manually:
+
+<p>1.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+From Microsoft Word,
+call the Visual Basic Editor via {<u>T</u>ools; <u>M</u>acro; <u>V</u>isual
+Basic Editor}.
+
+<p>2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+From the Project
+Explorer ({<u>V</u>iew; <u>P</u>roject Explorer}) choose the 'Normal' project
+from the tree root and open the 'Modules' branch.
+
+<p>3.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Select the module called
+'WordTmpDDEMod' and delete it using {<u>F</u>ile; <u>R</u>emove
+WordTmpDDEMod...} (you don't need to export it before removing).
+
+<h2><a name="_Toc449535043"></a><a
+name="_Toc465431037"><b><i>Regressive Word 97
+DDE functionality</i></b></a></h2>
+
+<p>According to <a
+href="mailto:tgiria@metlife.com">Ted Giria</a>, Word 97 allows not more
+then 256 bytes in a package whereas Word 95 allowes 127 commands at one.  Also Word 95 is more stable with DDE than
+97.  In some situations in Word 95 where
+you have an error message or error return code, Word 97 yields a GPF.
+
+<h1><a name="_Toc449535044"></a><a
+name="_Toc465431038"><b>Download</b></a></h1>
+
+<p>This program
+is free software; you can redistribute it and/or modify it under the terms of
+the GNU General Public License as published by the Free Software Foundation;
+either version 2 of the License, or any later version.
+
+<p>This program
+is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the <a
+href="http://www.gnu.org/">GNU General Public License</a> for more details.
+
+<p><i>file:</i>  <a href="../Zip/classExec-1.03b.zip">classExec-1.03b.zip</a>
+(binary), <a href="../Zip/classExec-1.03s.zip">classExec-1.03s.zip</a>
+(sources)<a name="_Toc428463899"></a>
+
+<h1><a name="_Toc449535045"></a><a
+name="_Toc465431039"><b>Alternatives</b></a></h1>
+
+<h2><a name="_Toc449535046"></a><a
+name="_Toc465431040"><b><i>'ShellExecute()'
+API function</i></b></a></h2>
+
+<p>If you – from within a Windows application –
+just want to start the application associated with a given file extension
+without knowing the name of the associated application, you're probably better
+of using the Windows API 'ShellExecute()' function.  This is the summary of the Microsoft document Q170918:
+
+<p><i>&quot;You can use the Windows API ShellExecute() function to start the
+application associated with a given document extension without knowing the name
+of the associated application. For example, you could start the Paintbrush
+program by passing the filename ARCADE.BMP to the ShellExecute()
+function.&quot;</i>
+
+<p>And this is what the Visual Basic declaration
+looks like:
+
+<pre>&nbsp;&nbsp; Declare Function ShellExecute Lib &quot;shell32.dll&quot; Alias &quot;ShellExecuteA&quot; ( _
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ByVal hwnd As Long, ByVal lpszOp As String, _
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ByVal lpszFile As String, ByVal lpszParams As String, _
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ByVal LpszDir As String, ByVal FsShowCmd As Long _
+&nbsp;&nbsp; ) As Long</pre>
+
+<h2><a name="_Toc449535047"></a><a
+name="_Toc465431041"><b><i>'Start' command
+line function</i></b></a></h2>
+
+<p>If you – from the command prompt – just want
+to start the application associated with a single file without knowing the name
+of the associated application, you can use the <CODE>start</CODE>
+function from the command prompt, e.g.:
+
+<pre>&nbsp;&nbsp; start arcade.bmp</pre>
+
+<p>This is what the help message (<CODE>start /?</CODE>) has to say:
+
+<pre>&nbsp;&nbsp; Runs a Windows program or an MS-DOS program.
+
+&nbsp;&nbsp; START [options] program [arg...]
+&nbsp;&nbsp; START [options] document.ext
+
+&nbsp;&nbsp; /m[inimized] Run the new program minimized (in the background).
+&nbsp;&nbsp; /max[imized] Run the new program maximized (in the foreground).
+&nbsp;&nbsp; /r[estored]&nbsp; Run the new program restored (in the foreground). [default]
+&nbsp;&nbsp; /w[ait]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Does not return until the other program exits.</pre>
+
+
+
+<h2><i><a name="Word Batch Conversion Wizard">Word Batch Conversion Wizard</a></i></h2>
+
+
+
+<p>Microsoft includes the Batch Conversion Wizard with Word.&nbsp; It allows you
+to do a conversion to/from Word format on a folder full of files.&nbsp; If Word
+is fully installed, there will be a file called <CODE>convert8.wiz</CODE>, in
+.\Program Files\Microsoft Office\Office\Macros.&nbsp; Double-click it and follow
+the instructions. </p>
+
+
+
+<p align=center><a href="../../../index.htm">Main Menu</a><br>
+This document was last revised Apr 16, 2000.
+
+</div>
+
+</body>
+
+</html>
